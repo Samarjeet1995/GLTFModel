@@ -1,0 +1,42 @@
+# Pseudocode for Main Processing Steps
+  To enhance the reproducibility of the methodology, the following pseudocode outlines the key processing steps used for 3D reconstruction, point cloud registration, and visualization.
+  
+1. Point Cloud Generation Using Structure-from-Motion (SfM) and Multi-View Stereo (MVS)
+Input: Set of high-resolution images (UAV and TCRP)
+Output: Dense point cloud model
+
+Step 1: Load images into WebODM
+Step 2: Perform feature extraction using Scale-Invariant Feature Transform (SIFT)
+Step 3: Match features across overlapping images
+Step 4: Estimate camera positions using bundle adjustment
+Step 5: Generate sparse point cloud using Structure-from-Motion (SfM)
+Step 6: Densify the point cloud using Multi-View Stereo (MVS)
+Step 7: Export point cloud in .LAS format
+
+2. Point Cloud Registration Using Iterative Closest Point (ICP)
+Input: UAV georeferenced point cloud, TCRP non-georeferenced point cloud
+Output: Registered and georeferenced point cloud
+
+Step 1: Import UAV and TCRP point clouds into CloudCompare
+Step 2: Apply statistical outlier removal (KNN=30, Std Dev=1.2) to filter noise
+Step 3: Select common feature points in both point clouds for initial alignment
+Step 4: Apply coarse alignment using point-to-point transformation
+Step 5: Execute ICP algorithm:
+    - Find the closest points between datasets
+    - Compute transformation matrix (rotation, translation, scaling)
+    - Minimize Root Mean Square Error (RMSE)
+    - Iterate until RMSE converges
+Step 6: Apply final transformation to TCRP point cloud
+Step 7: Merge point clouds and export registered model
+
+3. Conversion of Point Cloud to GLTF Model for Web Visualization
+Input: Registered point cloud (.LAS)
+Output: Optimized GLTF model for web rendering
+
+Step 1: Import point cloud into Blender
+Step 2: Convert point cloud to mesh using Poisson surface reconstruction
+Step 3: Simplify mesh using decimation (target 70% reduction)
+Step 4: Export model in GLTF format
+Step 5: Load GLTF model in Three.js for web-based visualization
+Step 6: Enable user interaction (zoom, pan, rotate)
+Step 7: Deploy model on a web server for accessibility
